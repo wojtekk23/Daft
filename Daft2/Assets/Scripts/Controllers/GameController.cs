@@ -129,6 +129,7 @@ public class GameController : MonoBehaviour
 
         int noOfWaves = 6;
         int noOfSpawns = 4;
+        int noOfInstances = 1;
         float timeBetweenSpawns = 0.7f;
         float timeBetweenWaves = 1.0f;
         float ballLifetimeOffset = 3.0f;
@@ -145,23 +146,32 @@ public class GameController : MonoBehaviour
                     //while (IsPaused)
                     //    yield return null;
 
-                    int id = randomContainer();
-
-                    while (id == -1)
+                    for (int k = 0; k < (noOfInstances + 1) / 2 && !IsGameOver; k++)
                     {
-                        yield return null;
-                        id = randomContainer();
+                        int id = randomContainer();
+
+                        while (id == -1)
+                        {
+                            yield return null;
+                            id = randomContainer();
+                        }
+
+                        // Jeśli w trakcie losowania wolnego kontenera skończyła się gra, przerwij pętlę
+                        if (IsGameOver)
+                            break;
+
+                        // Wyznacz czas życia kulki
+                        float lifetime = (float)rand.NextDouble() + ballLifetimeOffset;
+
+                        // Wylosuj kulkę (czarna z prawdopodobieństwem 1/10)
+                        activateController(id, lifetime, rand.Next(0, 10) != 1);
+
+                        yield return new WaitForSeconds(0.25f);
                     }
 
                     // Jeśli w trakcie losowania wolnego kontenera skończyła się gra, przerwij pętlę
                     if (IsGameOver)
                         break;
-
-                    // Wyznacz czas życia kulki
-                    float lifetime = (float)rand.NextDouble() + ballLifetimeOffset;
-
-                    // Wylosuj kulkę (czarna z prawdopodobieństwem 1/10)
-                    activateController(id, lifetime, rand.Next(0, 10) != 1);
 
                     yield return new WaitForSeconds(timeBetweenSpawns);
                 }
@@ -188,6 +198,11 @@ public class GameController : MonoBehaviour
                 noOfSpawns += 2;
             else
                 noOfSpawns = 15;
+
+            if (noOfInstances + 1 < 5)
+                noOfInstances += 1;
+            else
+                noOfInstances = 5;
         }
     }
 
