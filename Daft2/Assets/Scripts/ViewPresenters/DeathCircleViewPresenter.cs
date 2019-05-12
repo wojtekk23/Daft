@@ -3,17 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Obsługuje wygląd i zachowanie na ekranie czarnego koła
+/// </summary>
 public class DeathCircleViewPresenter : TapCircleViewPresenter
 {
+    /// <summary>
+    /// Komponent obrazu koła
+    /// </summary>
     Image circleMask;
 
+    /// <summary>
+    /// Sprite czarnego koła
+    /// </summary>
     public Sprite blackCircleSprite;
 
     protected override void Start()
     {
         base.Start();
 
-        // Pokoloruj maskę na czarny kolor
         circleMask = GetComponentInChildren<Image>();
 
         Debug.Log(circleMask.gameObject);
@@ -21,12 +29,10 @@ public class DeathCircleViewPresenter : TapCircleViewPresenter
         circleMask.sprite = blackCircleSprite;
     }
 
-    override protected void OnEnable()
-    {
-        // Zainicjuj obiekt
-        base.OnEnable();
-    }
-
+    /// <summary>
+    /// Korutyna ukrywająca koło z ekranu i informująca kontroler kontenera o kliknięciu koła
+    /// </summary>
+    /// <returns></returns>
     protected override IEnumerator TriggerCircleClick()
     {
         // Uruchom animację kliknięcia
@@ -39,6 +45,10 @@ public class DeathCircleViewPresenter : TapCircleViewPresenter
         containerController.onDeathClick();
     }
 
+    /// <summary>
+    /// Korutyna ukrywająca koło z ekranu i informująca kontroler kontenera o nie kliknięciu koła w czasie
+    /// </summary>
+    /// <returns></returns>
     protected override IEnumerator TriggerCircleMiss()
     {
         // Uruchom animację kliknięcia

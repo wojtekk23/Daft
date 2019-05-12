@@ -4,42 +4,60 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Obsługuje widok ekranu Menu
+/// 
+/// Manipuluje gameObjectami ekranu Menu i ich komponentami
+/// </summary>
 public class MenuScreenViewPresenter : MonoBehaviour
 {
-    // Obiekt game Modela
-    public GameModel gameModel;
-
-    // Game object z panelem z najlepszym wynikiem
+    /// <summary>
+    /// Game object z panelem z najlepszym wynikiem
+    /// </summary>
     public GameObject highScorePanel;
 
-    // Game object z paskiem ładowania
+    /// <summary>
+    /// Game object z paskiem ładowania
+    /// </summary>
     public GameObject sliderObject;
 
-    // Komoponent Slider paska łądowania sceny
+    /// <summary>
+    /// Komoponent Slider paska łądowania sceny
+    /// </summary>
     private Slider loadingBar;
 
-    // Kontroler sceny
+    /// <summary>
+    /// Kontroler sceny
+    /// </summary>
     public MenuScreenController menuScreenController;
 
-    // Start is called before the first frame update
     void Start()
     {
-        if (gameModel.HighScore == 0f)
+        if (menuScreenController.HighScore == 0f)
             highScorePanel.SetActive(false);
         else
-            highScorePanel.GetComponentInChildren<Text>().text = "Najlepszy czas:\n" + displayTime(gameModel.HighScore);
+            highScorePanel.GetComponentInChildren<Text>().text = "Najlepszy czas:\n" + DisplayTime(menuScreenController.HighScore);
 
         sliderObject.SetActive(false);
     }
 
-    internal void setLoadingProgress(float progress)
+    /// <summary>
+    /// Ustawia postęp ładowania w pasku ładowania
+    /// </summary>
+    /// <param name="progress">Postęp ładowania (0.0 - 1.0)</param>
+    public void SetLoadingProgress(float progress)
     {
         loadingBar.value = progress;
     }
 
-    private string displayTime(float highScore)
+    /// <summary>
+    /// Zwraca tekst z czasem w formacie m:ss
+    /// </summary>
+    /// <param name="time">Czas do przekonwertowania (w sekundach)</param>
+    /// <returns>Tekst ze skonwertowanym czasem w formacie m:ss</returns>
+    private string DisplayTime(float time)
     {
-        int rawSeconds = (int)highScore;
+        int rawSeconds = (int)time;
 
         string seconds = string.Empty;
 
@@ -51,6 +69,11 @@ public class MenuScreenViewPresenter : MonoBehaviour
         return (rawSeconds / 60).ToString() + ":" + seconds;
     }
 
+    /// <summary>
+    /// Trigger przycisku "Graj"
+    /// 
+    /// Wysyła do kontrolera prośbę o zmianę sceny
+    /// </summary>
     public void OnPlayButtonClick()
     {
         // Ukryj panel z wynikiem

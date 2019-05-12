@@ -3,52 +3,65 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Obsługuje i aktualizuje ekran końcowy gry
+/// </summary>
 public class EndScreenViewPresenter : MonoBehaviour
 {
+    /// <summary>
+    /// Sprite ze smutną buźką
+    /// </summary>
     public Sprite sadSprite;
+
+    /// <summary>
+    /// Sprite z zaskoczoną buźką
+    /// </summary>
     public Sprite shockSprite;
 
-    // Obiekt animatora dla ekranu końcowego
+    /// <summary>
+    /// Obiekt animatora dla ekranu końcowego
+    /// </summary>
     public Animator endScreenAnimator;
 
-    // Obiekt przycisku przechodzącego do ekranu głównego
+    /// <summary>
+    /// Obiekt przycisku przechodzącego do ekranu głównego
+    /// </summary>
     public Button button;
 
+    /// <summary>
+    /// Komponent przypisany game objectowi buźki
+    /// </summary>
     public Image smileyImage;
 
+    /// <summary>
+    /// Game object z przyciskiem
+    /// </summary>
     public GameObject buttonObject;
 
+    /// <summary>
+    /// Tekst wiadomości o najlepszym wyniku
+    /// </summary>
     public Text highScoreMessageText;
 
+    /// <summary>
+    /// Obiekt game kontrolera
+    /// </summary>
     public GameController gameController;
 
-    // Start is called before the first frame update
     void Start()
     {
+        // Wyłącz interaktywność przycisku
         button.interactable = false;
 
+        // Wyłącz animację pojawiania się ekranu końcowego
         endScreenAnimator.speed = 0;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void SolidifyEndScreen()
-    {
-        smileyImage.color = Color.white;
-
-        Color brownish = new Color(146.0f / 256.0f, 97.0f / 256.0f, 85.0f / 256.0f);
-
-        buttonObject.GetComponent<Image>().color = brownish;
-
-        buttonObject.GetComponentInChildren<Text>().color = brownish; 
-
-    }
-
-    // Trigger przycisku ładującego główny ekran aplikacji
+    /// <summary>
+    /// Trigger przycisku ładującego główny ekran aplikacji
+    /// 
+    /// Wysyła do game kontrolera prośbę o załadowanie ekranu menu
+    /// </summary>
     public void OnEndButtonClick()
     {
         Debug.Log("MENU");
@@ -56,6 +69,11 @@ public class EndScreenViewPresenter : MonoBehaviour
         gameController.LoadMainMenu();
     }
 
+    /// <summary>
+    /// Korutyna odkrywająca ekran końcowy po zakończonej rozgrywce
+    /// </summary>
+    /// <param name="isHighScoreSet">Czy ustanowiono nowy najlepszy wynik</param>
+    /// <returns></returns>
     public IEnumerator RevealEndScreen(bool isHighScoreSet)
     {
         Debug.Log("REVEAL END SCREEN (highscore: " + isHighScoreSet + ")");

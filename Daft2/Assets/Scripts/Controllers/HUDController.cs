@@ -2,13 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Obsługuje logikę HUD-a
+/// 
+/// Rozporządza zmiany w widoku HUD-a
+/// </summary>
 public class HUDController : MonoBehaviour
 {
-    // Komponent HUD View
+    /// <summary>
+    /// Komponent HUD View
+    /// </summary>
     public HUDViewPresenter hudview;
+
+    /// <summary>
+    /// Obiekt kontroler gry
+    /// </summary>
     public GameController gameController;
+
+    /// <summary>
+    /// Właściwość mówiąca, ile czasu upłynęło podczas obecnej rozgrywki
+    /// </summary>
     public float TimeElapsed { get; private set; }
 
+    /// <summary>
+    /// Właściwość mówiąca, czy gra się zakończyła
+    /// </summary>
     public bool GameOver
     {
         get
@@ -16,31 +34,42 @@ public class HUDController : MonoBehaviour
             return gameController.IsGameOver;
         }
     }
+
+    /// <summary>
+    /// Właściwość mówiąca, czy nadal trwa samouczek
+    /// </summary>
     public bool IsTutorial { get; set; }
 
-    // Start is called before the first frame update
     void Awake()
     {
+        // Domyślnie samouczek jest włączony w każdej rozgrywce
         IsTutorial = true;
 
         TimeElapsed = 0f;
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         if (!GameOver && !IsTutorial)
-            setTimer();
+            SetTimer();
     }
 
-    public void setTimer()
+    /// <summary>
+    /// Aktualizuje czas gry (dodaje czas trwania jednej klatki) i aktualizuje obiekt wyświetlający czas
+    /// </summary>
+    public void SetTimer()
     {
         TimeElapsed += Time.deltaTime;
 
         hudview.setTimer(TimeElapsed);
     }
 
-    public void setScore(int score)
+    /// <summary>
+    /// Aktualizuje wynik
+    /// </summary>
+    /// <param name="score">Nowy wynik obecnej gry</param>
+    public void SetScore(int score)
     {
         hudview.setScore(score);
     }

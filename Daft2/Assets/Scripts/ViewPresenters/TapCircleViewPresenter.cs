@@ -4,39 +4,64 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Obsługuje wygląd i zachowanie na ekranie zielonego koła
+/// </summary>
 public class TapCircleViewPresenter : MonoBehaviour
 {
+    /// <summary>
+    /// Czas życia koła
+    /// </summary>
     public double lifetime = 3.0;
 
+    /// <summary>
+    /// Ile czasu zostało, zanim koło zniknie
+    /// </summary>
     protected double timeLeft;
 
-    // Obiekt animatora czeronwej poświaty
+    /// <summary>
+    /// Obiekt animatora czeronwej poświaty
+    /// </summary>
     public Animator deathClockAnimator;
 
-    // Obiekt animatora dla animacji kliknięcia
+    /// <summary>
+    /// Obiekt animatora dla animacji kliknięcia
+    /// </summary>
     public Animator clickAnimator;
 
-    // Szybkość animacji po kliknięciu
+    /// <summary>
+    /// Szybkość animacji po kliknięciu
+    /// </summary>
     protected float shrinkSpeed = 2.0f;
 
-    // Obiekt kontenera kółka
+    /// <summary>
+    /// Obiekt kontenera kółka
+    /// </summary>
     protected CircleContainerController containerController;
 
-    // Obiekt tekstu wyświetlającego pozostały czas życia komórki
+    /// <summary>
+    /// Obiekt tekstu wyświetlającego pozostały czas życia komórki
+    /// </summary>
     protected Text lifeText;
 
+    /// <summary>
+    /// Właściwość mówiąca, czy koło zostało kliknięte
+    /// </summary>
     protected bool clicked;
-    public bool isClicked
+    public bool IsClicked
     {
         get { return clicked; }
+        private set { clicked = value; }
     }
 
+    /// <summary>
+    /// Czy nie zdążyliśmy kliknąć kołą w trakcie jego życia
+    /// </summary>
     protected bool missed;
 
-    // Start is called before the first frame update
     protected virtual void Start()
     {
-        clicked = false;
+        IsClicked = false;
 
         timeLeft = lifetime;
 
@@ -61,9 +86,9 @@ public class TapCircleViewPresenter : MonoBehaviour
         }
     }
 
-    virtual protected void OnEnable()
+    protected void OnEnable()
     {
-        clicked = false;
+        IsClicked = false;
         missed = false;
 
         // Przejimij kontener zawierający kółko
@@ -91,7 +116,6 @@ public class TapCircleViewPresenter : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
     protected void Update()
     {
         // Ustaw tekst na pozostałą ilość czasu
@@ -110,20 +134,26 @@ public class TapCircleViewPresenter : MonoBehaviour
             DeactivateCircle();
         }
         // Zmniejsz czas życia kółka
-        else if (!clicked && !missed)
+        else if (!IsClicked && !missed)
             timeLeft -= Time.deltaTime;
     }
 
+    /// <summary>
+    /// Uruchamia dezaktywację koła
+    /// </summary>
     protected void DeactivateCircle()
     {
         StartCoroutine(TriggerCircleMiss());
     }
 
+    /// <summary>
+    /// Obsługuje kliknięcie w kółko
+    /// </summary>
     public void TapCircle()
     {
-        if (!clicked)
+        if (!IsClicked && !missed)
         {
-            clicked = true;
+            IsClicked = true;
 
             // Zatrzymaj zegar
             deathClockAnimator.speed = 0;
@@ -132,9 +162,14 @@ public class TapCircleViewPresenter : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Uruchamia ukrywanie koła
+    /// 
+    /// Funkcja jest wywoływana podczas kończenia rozgrywki, aby usunąć wszystkie koła z ekranu
+    /// </summary>
     public void CircleDisappear()
     {
-        clicked = true;
+        IsClicked = true;
 
         // Zatrzymaj zegar
         deathClockAnimator.speed = 0;
@@ -142,6 +177,10 @@ public class TapCircleViewPresenter : MonoBehaviour
         StartCoroutine("TriggerCircleDisappear");
     }
 
+    /// <summary>
+    /// Korutyna uruchamiająca animację ukrywania koła
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator TriggerCircleDisappear()
     {
         // Uruchom animację kliknięcia
@@ -149,30 +188,27 @@ public class TapCircleViewPresenter : MonoBehaviour
         clickAnimator.speed = shrinkSpeed;
 
         yield return new WaitForSeconds(1.0f / shrinkSpeed);
-
-        //containerController.deactivateTap();
     }
 
+    /// <summary>
+    /// Korutyna ukrywająca koło z ekranu i informująca kontroler kontenera o kliknięciu koła
+    /// </summary>
+    /// <returns></returns>
     protected virtual IEnumerator TriggerCircleClick()
     {
-        // Uruchom animację kliknięcia
-        clickAnimator.Play("circleShrink", 0);
-        clickAnimator.speed = shrinkSpeed;
-
-        yield return new WaitForSeconds(1.0f / shrinkSpeed);
+        yield return TriggerCircleDisappear();
 
         // Wyślij informację do kontrolera
         containerController.onTapClick();
     }
 
-
+    /// <summary>
+    /// Korutyna ukrywająca koło z ekranu i informująca kontroler kontenera o nie kliknięciu koła w czasie
+    /// </summary>
+    /// <returns></returns>
     protected virtual IEnumerator TriggerCircleMiss()
     {
-        // Uruchom animację kliknięcia
-        clickAnimator.Play("circleShrink", 0);
-        clickAnimator.speed = shrinkSpeed;
-
-        yield return new WaitForSeconds(1.0f / shrinkSpeed);
+        yield return TriggerCircleDisappear();
 
         // Wyślij informację do kontrolera
         containerController.onTapMiss();

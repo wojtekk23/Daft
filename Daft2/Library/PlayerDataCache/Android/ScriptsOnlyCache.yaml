@@ -12,13 +12,6 @@ ScriptsOnlyBuild:
     - MenuScreenController
     - MenuScreenViewPresenter
     - TapCircleViewPresenter
-    UnityEditor.Graphs.dll:
-    - UnityEditor.Graphs.AnimationBlendTree.Graph
-    - UnityEditor.Graphs.AnimationBlendTree.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.AnyStateNode
-    - UnityEditor.Graphs.AnimationStateMachine.Graph
-    - UnityEditor.Graphs.AnimationStateMachine.GraphGUI
-    - UnityEditor.Graphs.AnimationStateMachine.StateNode
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.TestListCacheData
     UnityEngine.UI.dll:
@@ -81,19 +74,19 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9436}
     - Class: 114
-      Script: {instanceID: 9616}
+      Script: {instanceID: 10078}
     - Class: 114
-      Script: {instanceID: 10080}
+      Script: {instanceID: 10148}
     - Class: 114
       Script: {instanceID: 10150}
     - Class: 114
-      Script: {instanceID: 10152}
+      Script: {instanceID: 10248}
     - Class: 114
-      Script: {instanceID: 10250}
+      Script: {instanceID: 10732}
     - Class: 114
-      Script: {instanceID: 10734}
+      Script: {instanceID: 10750}
     - Class: 114
-      Script: {instanceID: 10752}
+      Script: {instanceID: 12200}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -142,13 +135,13 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 9436}
     - Class: 114
-      Script: {instanceID: 9630}
+      Script: {instanceID: 9628}
     - Class: 114
-      Script: {instanceID: 10078}
+      Script: {instanceID: 10076}
     - Class: 114
-      Script: {instanceID: 10152}
+      Script: {instanceID: 10150}
     - Class: 114
-      Script: {instanceID: 10734}
+      Script: {instanceID: 10732}
     - Class: 115
       Script: {instanceID: 0}
     - Class: 128
@@ -616,7 +609,7 @@ ScriptsOnlyBuild:
     className: SignalAsset
   - hash:
       serializedVersion: 2
-      Hash: 29c010ef0e68af719ae58658cead8968
+      Hash: 1b4c2de84326f18cce27929d5716c16b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MenuScreenController
@@ -1084,7 +1077,7 @@ ScriptsOnlyBuild:
     className: TMP_Asset
   - hash:
       serializedVersion: 2
-      Hash: 826ba88bbd353d3ca05ed721ba804aa1
+      Hash: 7f83b38caa17f36059985046ecc60daf
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: MenuScreenViewPresenter
@@ -1686,4 +1679,4 @@ ScriptsOnlyBuild:
   scenePathNames:
   - Assets/Scenes/MenuScreen.unity
   - Assets/Scenes/GameScene.unity
-  playerPath: C:/Users/Wojtek/Daft2/fullApp4.apk
+  playerPath: C:/Users/Wojtek/fullApp4.apk

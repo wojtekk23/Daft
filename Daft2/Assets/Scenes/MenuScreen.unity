@@ -977,6 +977,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   appManager: {fileID: 1614648611}
   menuScreenViewPresenter: {fileID: 5084826246847980774}
+  gameModel: {fileID: 100379801}
 --- !u!1 &5084826246374771368
 GameObject:
   m_ObjectHideFlags: 0
@@ -1295,7 +1296,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c65bd696cb465194787db9e38075b1ef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameModel: {fileID: 100379801}
   highScorePanel: {fileID: 5084826246548585069}
   sliderObject: {fileID: 1394841527}
   menuScreenController: {fileID: 2065221491}

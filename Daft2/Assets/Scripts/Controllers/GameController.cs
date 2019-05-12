@@ -5,44 +5,76 @@ using UnityEngine;
 using UnityEngine.UI;
 using Random = System.Random;
 
+/// <summary>
+/// Obsługuje logikę obecnie trwającej rozgrywki
+/// 
+/// Rozmieszcza koła na ekranie, rozporządza aktualizowaniem wyniku, itp.
+/// </summary>
 public class GameController : MonoBehaviour
 {
-    // Obiekt menadżera aplikacji
+    /// <summary>
+    /// Obiekt menadżera aplikacji
+    /// </summary>
     public AppManager appManager;
 
-    // Obiekt Game Modela
+    /// <summary>
+    /// Obiekt Game Modela
+    /// </summary>
     public GameModel gameModel;
 
-    // Obiekt kontrolera HUD-a
+    /// <summary>
+    /// Obiekt kontrolera HUD-a
+    /// </summary>
     public HUDController hudcontroller;
 
-    // View presenter dla ekranu końcowego
+    /// <summary>
+    /// View presenter dla ekranu końcowego
+    /// </summary>
     public EndScreenViewPresenter endScreenViewPresenter;
 
-    // Obiekt grida z kontenerami dla kółek
+    /// <summary>
+    /// Obiekt grida z kontenerami dla kółek
+    /// </summary>
     public GridLayoutGroup grid;
 
-    // Prefab kontenera dla kółek
+    /// <summary>
+    /// Prefab kontenera dla kółek
+    /// </summary>
     public GameObject containerPrefab;
 
-    // Szybkość kurczenia się kółek
+    /// <summary>
+    /// Szybkość kurczenia się kółek
+    /// </summary>
     public float shrinkSpeed = 2.0f;
 
-    // Tablica kontrolerów kontenerów dla kółek
+    /// <summary>
+    /// Tablica kontrolerów kontenerów dla kółek
+    /// </summary>
     private CircleContainerController[] circleContainers;
 
-    // Liczba kontenerów na ekranie
+    /// <summary>
+    /// Liczba kontenerów na ekranie
+    /// </summary>
     private int noOfCircleContainers;
 
+    /// <summary>
+    /// Czy w obecnej rozgrywce osiągnęliśmy najlepszy czas
+    /// </summary>
     private bool isHighScoreSet;
 
+    /// <summary>
+    /// Własność mówiąca, czy nastąpił koniec obecnej rozgrywki
+    /// </summary>
     public bool IsGameOver { get; private set; }
-    //public bool IsPaused { get; private set; }
 
-    // Generator losowości
+    /// <summary>
+    /// Generator losowości
+    /// </summary>
     Random rand;
 
-    // obecna liczba punktów (zebranych kół)
+    /// <summary>
+    /// obecna liczba punktów (zebranych kół)
+    /// </summary>
     private int currentScore = 0;
 
     void Awake()
@@ -56,14 +88,17 @@ public class GameController : MonoBehaviour
         if (shrinkSpeed == 0.0f)
             Debug.LogError("Shrink speed set to 0");
 
+        // Policz, ile kontenerów ma być na planszy
         noOfCircleContainers = countCircleContainers();
         Debug.Log(noOfCircleContainers);
 
+        // Zainicjuj tablicę kontenerów
         circleContainers = new CircleContainerController[noOfCircleContainers];
 
         // Znajdź Game Arena
         GameObject gameArena = GameObject.FindGameObjectWithTag("GameArena");
 
+        // Stwórz kontenery i przypisz je do tablicy
         for (int i = 0; i < noOfCircleContainers; i++)
         {
             GameObject containerObject = Instantiate(containerPrefab, gameArena.transform);
@@ -74,9 +109,14 @@ public class GameController : MonoBehaviour
 
     void Start()
     {
+        // Rozpocznij grę
         StartCoroutine(StartGame());
     }
 
+    /// <summary>
+    /// Korutyna przeprowadzająca rozgrywkę
+    /// </summary>
+    /// <returns></returns>
     private IEnumerator StartGame()
     {
         // Przeprowadź "samouczek"
@@ -89,7 +129,7 @@ public class GameController : MonoBehaviour
 
         int noOfWaves = 6;
         int noOfSpawns = 4;
-        float timeBetweenSpawns = 0.6f;
+        float timeBetweenSpawns = 0.7f;
         float timeBetweenWaves = 1.0f;
         float ballLifetimeOffset = 3.0f;
 
@@ -120,17 +160,7 @@ public class GameController : MonoBehaviour
                     // Wyznacz czas życia kulki
                     float lifetime = (float)rand.NextDouble() + ballLifetimeOffset;
 
-                    //// Wylosuj czarną kulkę
-                    //if (rand.Next(0, 10) == 1)
-                    //{
-                    //    activateController(id, lifetime, false);
-                    //}
-                    //// Wylosuj zieloną kulkę
-                    //else
-                    //{
-                    //    activateController(id, lifetime, true);
-                    //}
-
+                    // Wylosuj kulkę (czarna z prawdopodobieństwem 1/10)
                     activateController(id, lifetime, rand.Next(0, 10) != 1);
 
                     yield return new WaitForSeconds(timeBetweenSpawns);
@@ -161,7 +191,9 @@ public class GameController : MonoBehaviour
         }
     }
 
-    // Funkcja obsługująca "przegranie" gry
+    /// <summary>
+    /// Funkcja obsługująca "przegranie" gry
+    /// </summary>
     public void onLose()
     {
         IsGameOver = true;
@@ -182,6 +214,10 @@ public class GameController : MonoBehaviour
         StartCoroutine(RevealEndPanel());
     }
 
+    /// <summary>
+    /// Korutyna uruchamiająca panel końcowy (po zakończonej rozgrywce)
+    /// </summary>
+    /// <returns></returns>
     IEnumerator RevealEndPanel()
     {
         yield return new WaitForSeconds(1.0f);
@@ -190,9 +226,13 @@ public class GameController : MonoBehaviour
         StartCoroutine(endScreenViewPresenter.RevealEndScreen(isHighScoreSet));
     }
 
-    // Funkcja obliczająca, ile kontenerów trzeba rozmieścić na ekranie
-    // Będziemy rozmieszczać po 7 kontenerów w rzędzie, liczymy ile rzędów mieści się na ekranie
-    // oraz ustawiamy odpowiedni padding dla grida
+    /// <summary>
+    /// Funkcja obliczająca, ile kontenerów trzeba rozmieścić na ekranie
+    /// 
+    /// Będziemy rozmieszczać po 7 kontenerów w rzędzie, liczymy ile rzędów mieści się na ekranie
+    /// oraz ustawiamy odpowiedni padding dla grida
+    /// </summary>
+    /// <returns></returns>
     int countCircleContainers()
     {
         // Oblicz rzeczywistą wysokość canvasa (przydatne w przypadku różnych rozdzielczości)
@@ -221,17 +261,26 @@ public class GameController : MonoBehaviour
         return 7 * n;
     }
 
-    // Funkcja aktualizująca wynik
+    /// <summary>
+    /// Funkcja aktualizująca wynik obecnej gry
+    /// </summary>
     public void updateScore()
     {
         if (!hudcontroller.IsTutorial)
             currentScore++;
 
         // Zaktualizuj HUD
-        hudcontroller.setScore(currentScore);
+        hudcontroller.SetScore(currentScore);
     }
 
-    // Funkcja uruchamiająca dany kontroler
+    /// <summary>
+    /// Funkcja uruchamiająca kontroler danego kółka
+    /// 
+    /// Na ekranie, w kontenerze o podanym ID, pojawia się kółko określonego koloru
+    /// </summary>
+    /// <param name="id">ID kontenera, które ma przetrzymywać nowe koło</param>
+    /// <param name="lifetime">Czas życia nowego koła</param>
+    /// <param name="isTap">Czy koło ma być zielone</param>
     private void activateController(int id, float lifetime, bool isTap)
     {
         if (isTap)
@@ -240,12 +289,18 @@ public class GameController : MonoBehaviour
             circleContainers[id].activateDeath(lifetime);
     }
 
+    /// <summary>
+    /// Wyślij do menadżera aplikacji prośbę o załadowanie ekranu Menu
+    /// </summary>
     public void LoadMainMenu()
     {
         appManager.LoadMenuScreen();
     }
 
-    // Funkcja zwracająca identyfikator niezajętego kontenera
+    /// <summary>
+    /// Funkcja zwracająca identyfikator losowego, niezajętego kontenera
+    /// </summary>
+    /// <returns>ID niezajętego kontenera</returns>
     int randomContainer()
     {
         List<int> freeContainers = new List<int>();
@@ -262,7 +317,10 @@ public class GameController : MonoBehaviour
         return freeContainers[id];
     }
 
-    // Korutyna uruchamiająca podstawowy samouczek
+    /// <summary>
+    /// Korutyna uruchamiająca podstawowy samouczek
+    /// </summary>
+    /// <returns></returns>
     IEnumerator tutorialStage()
     {
         // Pierwsze zielone kółko

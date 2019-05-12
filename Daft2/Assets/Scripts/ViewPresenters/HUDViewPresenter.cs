@@ -4,36 +4,44 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+/// <summary>
+/// Obsługuje widok HUD-a
+/// 
+/// Zmienia teksty wyświetlające czas rozgrywki i liczbę klikniętych kółek
+/// </summary>
 public class HUDViewPresenter : MonoBehaviour
 {
-    // Tekst przechowujący wynik
+    /// <summary>
+    /// Tekst przechowujący wynik
+    /// </summary>
     private Text scoreText;
 
-    // Tekst timera
+    /// <summary>
+    /// Tekst timera
+    /// </summary>    
     private Text timerText;
 
-    // Start is called before the first frame update
     void Start()
     {
         // Pobierz obiekty przechowujące teksty HUD-a
         scoreText = GameObject.FindGameObjectWithTag("Score").GetComponent<Text>();
         timerText = GameObject.FindGameObjectWithTag("Timer").GetComponent<Text>();
-
-        //timerText.text = "0:00";
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    internal void setScore(int score)
+    /// <summary>
+    /// Zmienia tekst wyniku tak, by wyświetlał nowo uzyskany wynik
+    /// </summary>
+    /// <param name="score">Nowo uzyskany wynik</param>
+    public void setScore(int score)
     {
         scoreText.text = score.ToString();
     }
 
-    internal void setTimer(float timeElapsed)
+    /// <summary>
+    /// Zmienia tekst czasu tak, by wyświetlał obecny czas gry
+    /// </summary>
+    /// <param name="timeElapsed">Obecny czas gry</param>
+    public void setTimer(float timeElapsed)
     {
         int minutes = (int)(timeElapsed / 60);
         int seconds = (int)timeElapsed % 60;

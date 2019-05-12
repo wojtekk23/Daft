@@ -3,11 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+/// <summary>
+/// Obsługuje sprawy techniczne niezwiązane z samą rozgrywką, wspólne dla wszystkich scen aplikacji
+/// </summary>
 public class AppManager : MonoBehaviour
 {
-    //
+    /// <summary>
+    /// Obiekt służący do przechwytywania aktywności i minimalizowania aplikacji w Androidzie
+    /// </summary>
     AndroidJavaObject activity;
 
+    /// <summary>
+    /// Korutyna ładująca scenę z ekranem rozgrywki
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator LoadGameScene()
     {
         MenuScreenController menuController = GameObject.FindGameObjectWithTag("MenuController").GetComponent<MenuScreenController>();
@@ -43,18 +52,24 @@ public class AppManager : MonoBehaviour
 
     private void Update()
     {
-        // Zminimalizuj aplikację
+        // Zminimalizuj aplikację po naciśnięciu przycisku powrtonego w Androidzie
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             MinimizeWindow();
         }
     }
 
+    /// <summary>
+    /// Ładuje scenę Menu
+    /// </summary>
     public void LoadMenuScreen()
     {
         SceneManager.LoadScene(0);
     }
 
+    /// <summary>
+    /// Minimalizuje okno z grą na urządzeniach z Androidem
+    /// </summary>
     public void MinimizeWindow()
     {
         if (activity != null)

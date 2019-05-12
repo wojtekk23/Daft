@@ -2,9 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+/// <summary>
+/// Model gry.
+/// 
+/// Manipuluje danymi trwałymi (nadal dstępnych po wyłączeniu aplikacji)
+/// </summary>
 public class GameModel : MonoBehaviour
 {
+    /// <summary>
+    /// Najlepszy wynik
+    /// </summary>
     private float bestTime;
+
+    /// <summary>
+    /// Właściwość mówiąca, czy gracz w przeszłości odbył smaouczek
+    /// </summary>
     public bool DoneTutorial
     {
         get
@@ -17,6 +29,9 @@ public class GameModel : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Właściwość zwracająca obecnie najlepszy czas
+    /// </summary>
     public float HighScore
     {
         get
@@ -32,18 +47,23 @@ public class GameModel : MonoBehaviour
     {
         Debug.Log(Screen.height);
         Debug.Log(Screen.width);
-        Debug.Log("tut: " + DoneTutorial);
 
         // Pobierz high score
         if (PlayerPrefs.HasKey("highscore"))
             bestTime = PlayerPrefs.GetFloat("highscore");
         else
-            bestTime = 0;
+            bestTime = 0f;
 
         Debug.Log("bestTime: " + bestTime);
     }
 
-    // zwraca true, gdy udało ustawić się najlepszy wynik
+    /// <summary>
+    /// Przyjmuje wynik zakończonej rozgrywki i aktualizuje najlepszy czas.
+    /// 
+    /// Jeśli czas zakończonej rozgrywki jest lepszy od obecnego najwyższego wyniku, zwraca true, wpp. false.
+    /// </summary>
+    /// <param name="gameTime">Czas zakończonej rozgrywki w sekundach</param>
+    /// <returns>True - jeśli zaktualizowaliśmy najlepszy czas, false - jeśli nie było takiej potrzeby</returns>
     public bool SetBestTime(float gameTime)
     {
         if (gameTime <= bestTime)
